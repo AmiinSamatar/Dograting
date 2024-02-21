@@ -4,27 +4,42 @@ const Doglist = () => {
     const [dogs, setDogs] = useState([]);
 
     const getDogs = async () => {
-      try {
-          const response = await fetch("https://dog.ceo/api/breeds/list/all");
-          if (!response.ok) {
-              throw new Error('Failed to fetch dogs');
-          }
-          const data = await response.json();
-          // Extract the list of dog breeds from the response
-          const breeds = Object.keys(data.message);
-          // Create an array of dog objects with name and image properties
-          const dogsData = breeds.map((breed, index) => ({
-              name: breed,
-              // You can use a placeholder image or fetch dog images from another endpoint
-              image: `https://via.placeholder.com/150/000000/FFFFFF/?text=${breed}`, 
-              // Example placeholder image URL
-          }));
-          setDogs(dogsData);
-      } catch (error) {
-          console.error('Error fetching dogs:', error);
-      }
-  }
-
+        try {
+            const response = await fetch("https://dog.ceo/api/breeds/list/all");
+            if (!response.ok) {
+                throw new Error('Failed to fetch dogs');
+            }
+            const data = await response.json();
+            // Extract the list of dog breeds from the response
+            const breeds = Object.keys(data.message);
+    
+            // Fetch a random image for each breed
+            const dogsData = await Promise.all(breeds.map(async (breed) => {
+                try {
+                    const imageResponse = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`);
+                    if (!imageResponse.ok) {
+                        throw new Error(`Failed to fetch image for ${breed}`);
+                    }
+                    const imageData = await imageResponse.json();
+                    return {
+                        name: breed,
+                        image: imageData.message
+                    };
+                } catch (error) {
+                    console.error(`Error fetching image for ${breed}:`, error);
+                    return {
+                        name: breed,
+                        image: null // Set image to null if fetching fails
+                    };
+                }
+            }));
+    
+            setDogs(dogsData);
+        } catch (error) {
+            console.error('Error fetching dogs:', error);
+        }
+    }
+    
     useEffect(() => {
         getDogs();
     }, []);
