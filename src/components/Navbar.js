@@ -43,6 +43,10 @@ function Navbar() {
   </Link>
 </li>        
       </ul>
+      <div className="search-box">
+        <input type="text" placeholder="Search"/>
+        <img src="" alt=""/>
+      </div>
       <div onClick={navToggle} className={icon}>
         <div className="line1"></div>
         <div className="line2"></div>
