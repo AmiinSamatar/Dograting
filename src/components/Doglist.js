@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Doglist = () => {
+const DogList = () => {
     const [dogs, setDogs] = useState([]);
 
     const getDogs = async () => {
@@ -10,10 +10,8 @@ const Doglist = () => {
                 throw new Error('Failed to fetch dogs');
             }
             const data = await response.json();
-            // Extract the list of dog breeds from the response
             const breeds = Object.keys(data.message);
-    
-            // Fetch a random image for each breed
+
             const dogsData = await Promise.all(breeds.map(async (breed) => {
                 try {
                     const imageResponse = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`);
@@ -29,32 +27,51 @@ const Doglist = () => {
                     console.error(`Error fetching image for ${breed}:`, error);
                     return {
                         name: breed,
-                        image: null // Set image to null if fetching fails
+                        image: null
                     };
                 }
             }));
-    
+
             setDogs(dogsData);
         } catch (error) {
             console.error('Error fetching dogs:', error);
         }
     }
-    
+
     useEffect(() => {
         getDogs();
     }, []);
+
+    const handleAction = async (dogName, actionType) => {
+        try {
+            const response = await fetch(`/api/dogs/${actionType}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dogName })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to ${actionType} for ${dogName}`);
+            }
+
+            console.log(`${actionType} action performed for ${dogName}`);
+        } catch (error) {
+            console.error(`Error performing ${actionType} action for ${dogName}:`, error);
+        }
+    };
 
     return (
         <div className="container">
             {dogs.map((dog, index) => (
                 <div className="card_item" key={index}>
                     <div className="card_inner">
-                        {/* Assuming there is an image property for each dog */}
                         <img src={dog.image} alt={dog.name} />
                         <div className="dogName">{dog.name}</div>
-                        {/* You can add more details based on the API response */}
-                        {/* For example: dog.breed, dog.temperament, etc. */}
-                        <button className="seeMore">See More</button>
+                        <button className="actionButton" onClick={() => handleAction(dog.name, 'wag')}>Wag</button>
+                        <button className="actionButton" onClick={() => handleAction(dog.name, 'growl')}>Growl</button>
+                        <button className="actionButton" onClick={() => handleAction(dog.name, 'superwag')}>Super Wag</button>
                     </div>
                 </div>
             ))}
@@ -62,4 +79,4 @@ const Doglist = () => {
     );
 }
 
-export default Doglist;
+export default DogList;

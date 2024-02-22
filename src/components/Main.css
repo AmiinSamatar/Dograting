@@ -287,9 +287,9 @@ body {
 	color: #788697;
 }
 
-.seeMore {
+.actionButton {
 	margin: 10px auto;
-	width: 100px;
+	width: 70px;
 	height: 35px;
 	background: hsl(245, 44%, 65%);
 	color: #fff;
@@ -298,6 +298,7 @@ body {
 	font-weight: 600;
 	cursor: pointer;
 	box-shadow: 0 10px 10px hsl(225, 100%, 94%);
+  justify-content: space-between;
 }
 
 @media screen and (max-width: 1024px) {
