@@ -7,7 +7,7 @@ const DogList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('your-api-endpoint'); // Replace 'your-api-endpoint' with the actual endpoint URL
+                const response = await fetch('https://gpbc5kdr87.execute-api.us-east-1.amazonaws.com/prod/all_dogs'); // Replace 'your-api-endpoint' with the actual endpoint URL
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }

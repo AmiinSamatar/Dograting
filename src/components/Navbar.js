@@ -30,7 +30,7 @@ function Navbar() {
 
         <li className="nav__item">
   <Link to="/ratings" className="nav__link">
-   My ratings
+   Growl list
   </Link>
 </li><li className="nav__item">
   <Link to="/superwag" className="nav__link">
@@ -39,7 +39,7 @@ function Navbar() {
 </li>
 <li className="nav__item">
   <Link to="/sharelinks" className="nav__link">
-    Share Links
+    Wag list
   </Link>
 </li>        
       </ul>
